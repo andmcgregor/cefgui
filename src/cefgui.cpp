@@ -77,3 +77,14 @@ void Cefgui::keyPress(unsigned char key)
 
   browser->GetHost()->SendKeyEvent(event);
 }
+
+void Cefgui::executeJS(const char* command)
+{
+  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
+  frame->ExecuteJavaScript(command, frame->GetURL(), 0);
+
+  // TODO limit frequency of texture updating
+  CefRect rect;
+  renderHandler->GetViewRect(browser, rect);
+  browser->GetHost()->Invalidate(rect, PET_VIEW);
+}

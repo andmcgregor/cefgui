@@ -17,9 +17,12 @@ class Cefgui {
     void load(const char*);
     void draw(void);
     void reshape(int, int);
+
     void mouseMove(int, int);
     void mouseClick(int, int, int, int);
     void keyPress(unsigned char);
+
+    void executeJS(const char*);
 
   private:
     CefRefPtr<CefBrowser> browser;
