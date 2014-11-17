@@ -46,4 +46,5 @@ void Cefgui::load(const char* url)
 void Cefgui::setWindowSize(int w, int h)
 {
   renderHandler->setWindowSize(w, h);
+  browser->GetHost()->WasResized();
 }
