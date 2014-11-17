@@ -9,7 +9,7 @@ CEFGUI = -Lbin -lcefgui -Wl,-Rbin
 GTK = $$(pkg-config gtk+-2.0 --cflags) $$(pkg-config gtk+-2.0 --libs)
 
 simple_example:
-	$(CC) examples/simple_example.cpp $(CEFGUI) $(OGL) $(CEF)
+	$(CC) -o examples/simple_example examples/simple_example.cpp $(CEFGUI) $(OGL) $(CEF)
 
 cefgui:
 	$(CC) -shared -fPIC -o bin/libcefgui.so src/*.cpp $(OGL) $(CEF)
@@ -17,4 +17,4 @@ cefgui:
 all:
 	make cefgui
 	make simple_example
-	./a.out
+	examples/simple_example

@@ -21,6 +21,7 @@ Cefgui::Cefgui()
   CefBrowserSettings settings;
 
   windowInfo.SetAsOffScreen(nullptr);
+  windowInfo.SetTransparentPainting(true);
 
   renderHandler = new RenderHandler();
 
