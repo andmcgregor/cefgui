@@ -47,7 +47,7 @@ void RenderHandler::draw(void)
   glUseProgram(0);
 }
 
-void RenderHandler::setWindowSize(int w_, int h_)
+void RenderHandler::reshape(int w_, int h_)
 {
   w = w_;
   h = h_;

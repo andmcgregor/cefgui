@@ -23,8 +23,26 @@ void display(void)
 void reshape(int w, int h)
 {
   // set browser size
-  cefgui->setWindowSize(w, h);
+  cefgui->reshape(w, h);
   glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+}
+
+void mouse(int btn, int state, int x, int y)
+{
+  // send mouse click to browser
+  cefgui->mouseClick(btn, state, x, y);
+}
+
+void motion(int x, int y)
+{
+  // send mouse movement to browser
+  cefgui->mouseMove(x, y);
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+  // send key press to browser
+  cefgui->keyPress(key);
 }
 
 int main(int argc, char** argv)
@@ -49,15 +67,14 @@ int main(int argc, char** argv)
   glClearColor(0.0, 0.0, 0.0, 0.0);
 
   // set window size & url
-  cefgui->setWindowSize(1000, 1000);
+  cefgui->reshape(1000, 1000);
   cefgui->load("http://www.google.com");
 
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
-  //glutKeyboardFunc(keyboard);
-  //glutMouseFunc(mouse);
-  //glutMotionFunc(motion);
-  //glutPassiveMotionFunc(passiveMotion);
+  glutMouseFunc(mouse);
+  glutPassiveMotionFunc(motion);
+  glutKeyboardFunc(keyboard);
 
   glutMainLoop();
 

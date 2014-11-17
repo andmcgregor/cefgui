@@ -15,10 +15,8 @@ class RenderHandler : public CefRenderHandler {
     bool initialized;
 
     void init(void);
-
     void draw(void);
-
-    void setWindowSize(int, int);
+    void reshape(int, int);
 
     bool GetViewRect(CefRefPtr<CefBrowser> browser, CefRect &rect);
 

@@ -29,12 +29,6 @@ Cefgui::Cefgui()
   browser = CefBrowserHost::CreateBrowserSync(windowInfo, client.get(), "", settings, nullptr);
 }
 
-void Cefgui::draw(void)
-{
-  CefDoMessageLoopWork();
-  renderHandler->draw();
-}
-
 void Cefgui::load(const char* url)
 {
   if (!renderHandler->initialized)
@@ -43,8 +37,43 @@ void Cefgui::load(const char* url)
   browser->GetMainFrame()->LoadURL(url);
 }
 
-void Cefgui::setWindowSize(int w, int h)
+void Cefgui::draw(void)
 {
-  renderHandler->setWindowSize(w, h);
+  CefDoMessageLoopWork();
+  renderHandler->draw();
+}
+
+void Cefgui::reshape(int w, int h)
+{
+  renderHandler->reshape(w, h);
   browser->GetHost()->WasResized();
+}
+
+void Cefgui::mouseMove(int x, int y)
+{
+  CefMouseEvent event;
+  event.x = x;
+  event.y = y;
+
+  browser->GetHost()->SendMouseMoveEvent(event, false);
+}
+
+void Cefgui::mouseClick(int btn, int state, int x, int y)
+{
+  CefMouseEvent event;
+  event.x = x;
+  event.y = y;
+
+  bool mouseUp = state == 1;
+  CefBrowserHost::MouseButtonType btnType = MBT_LEFT;
+  browser->GetHost()->SendMouseClickEvent(event, btnType, mouseUp, 1);
+}
+
+void Cefgui::keyPress(unsigned char key)
+{
+  CefKeyEvent event;
+  event.native_key_code = (int) key;
+  event.type = KEYEVENT_KEYDOWN;
+
+  browser->GetHost()->SendKeyEvent(event);
 }

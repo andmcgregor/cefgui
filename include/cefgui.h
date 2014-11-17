@@ -14,11 +14,12 @@ class Cefgui {
   public:
     Cefgui();
 
+    void load(const char*);
     void draw(void);
-
-    void load(const char* url);
-
-    void setWindowSize(int, int);
+    void reshape(int, int);
+    void mouseMove(int, int);
+    void mouseClick(int, int, int, int);
+    void keyPress(unsigned char);
 
   private:
     CefRefPtr<CefBrowser> browser;

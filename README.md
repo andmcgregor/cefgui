@@ -5,8 +5,8 @@ in progress.
 
 ## To Do
 
-- better handling of resizing window
-- send mouse and keyboard events to browser
+- ~~better handling of resizing window~~
+- ~~send mouse and keyboard events to browser~~
 - implement javascript callbacks
 
 ## Notes
