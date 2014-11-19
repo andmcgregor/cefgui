@@ -1,6 +1,6 @@
-#version 330
+#version 150
 
-layout(location = 0) in vec2 position;
+in vec2 position;
 
 out vec2 Texcoord;
 

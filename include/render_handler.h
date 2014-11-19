@@ -30,7 +30,7 @@ class RenderHandler : public CefRenderHandler {
   private:
     int w, h;
 
-    GLuint program, vao, vbo, texture;
+    GLuint program, vao, vbo, texture, positionLoc;
 
     GLuint compileShader(GLenum, const char*);
 

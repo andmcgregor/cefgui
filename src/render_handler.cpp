@@ -12,11 +12,14 @@ void RenderHandler::init(void)
   GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, "shaders/gui.frag");
 
   program = glCreateProgram();
+
   glAttachShader(program, vertexShader);
   glAttachShader(program, fragmentShader);
   glLinkProgram(program);
   glDetachShader(program, vertexShader);
   glDetachShader(program, fragmentShader);
+
+  positionLoc = glGetAttribLocation(program, "position");
 
   float coords[] = {-1.0,-1.0,-1.0,1.0,1.0,-1.0,1.0,-1.0,-1.0,1.0,1.0,1.0};
 
@@ -25,6 +28,8 @@ void RenderHandler::init(void)
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
+  glEnableVertexAttribArray(positionLoc);
+  glVertexAttribPointer(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
@@ -37,10 +42,7 @@ void RenderHandler::draw(void)
   glBindVertexArray(vao);
 
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
   glDrawArrays(GL_TRIANGLES, 0, 6);
-  glDisableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   glBindVertexArray(0);
