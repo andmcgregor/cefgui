@@ -1,21 +1,19 @@
-CC = g++ -g -std=c++11 $(GTK)
+CC = g++ -g -std=c++11
 
-# libs
-OGL = -lGL -lGLU -lGLEW -lglut
+OGL_LINUX = -lGL -lGLEW -lglfw
 CEF = -Lcef/linux/lib -lcef -lcef_dll_wrapper -Wl,-R. -Wl,-Rcef/linux/lib
 CEFGUI = -Lbin -lcefgui -Wl,-Rbin
 
-# required for me to properly build on Arch Linux
 GTK = $$(pkg-config gtk+-2.0 --cflags) $$(pkg-config gtk+-2.0 --libs)
 
-simple_example:
-	$(CC) -o examples/simple_example examples/simple_example.cpp $(CEFGUI) $(OGL) $(CEF)
+simple_example_linux:
+	$(CC) $(GTK) -o examples/simple_example examples/simple_example.cpp $(CEFGUI) $(CEF) $(OGL_LINUX)
 
-cefgui:
-	$(CC) -shared -fPIC -o bin/libcefgui.so src/*.cpp $(OGL) $(CEF)
+cefgui_linux:
+	$(CC) $(GTK) -shared -fPIC -o bin/libcefgui.so src/*.cpp $(CEF) $(OGL_LINUX)
 	cp -a cef/linux/lib/. bin/
 
-all:
-	make cefgui
-	make simple_example
+linux:
+	make cefgui_linux
+	make simple_example_linux
 	examples/simple_example

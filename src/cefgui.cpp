@@ -51,6 +51,9 @@ void Cefgui::reshape(int w, int h)
 
 void Cefgui::mouseMove(int x, int y)
 {
+  mouseX = x;
+  mouseY = y;
+
   CefMouseEvent event;
   event.x = x;
   event.y = y;
@@ -58,21 +61,21 @@ void Cefgui::mouseMove(int x, int y)
   browser->GetHost()->SendMouseMoveEvent(event, false);
 }
 
-void Cefgui::mouseClick(int btn, int state, int x, int y)
+void Cefgui::mouseClick(int btn, int state)
 {
   CefMouseEvent event;
-  event.x = x;
-  event.y = y;
+  event.x = mouseX;
+  event.y = mouseY;
 
-  bool mouseUp = state == 1;
+  bool mouseUp = state == 0;
   CefBrowserHost::MouseButtonType btnType = MBT_LEFT;
   browser->GetHost()->SendMouseClickEvent(event, btnType, mouseUp, 1);
 }
 
-void Cefgui::keyPress(unsigned char key)
+void Cefgui::keyPress(int key)
 {
   CefKeyEvent event;
-  event.native_key_code = (int) key;
+  event.native_key_code = key;
   event.type = KEYEVENT_KEYDOWN;
 
   browser->GetHost()->SendKeyEvent(event);

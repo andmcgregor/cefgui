@@ -2,44 +2,45 @@
 
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/freeglut.h>
+#include <GLFW/glfw3.h>
 
 #include "../include/cefgui.h"
 
 Cefgui* cefgui;
 
-void display(void)
+void display(GLFWwindow* window)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // draw browser to screen
   cefgui->draw();
 
-  glutSwapBuffers();
-  glutPostRedisplay();
+  glfwSwapBuffers(window);
+  glfwPollEvents();
 }
 
-void reshape(int w, int h)
+void reshape(GLFWwindow* window, int w, int h)
 {
   // set browser size
   cefgui->reshape(w, h);
   glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 }
 
-void mouse(int btn, int state, int x, int y)
+void mouse(GLFWwindow* window, int btn, int state, int mods)
 {
   // send mouse click to browser
-  cefgui->mouseClick(btn, state, x, y);
+
+  cefgui->mouseClick(btn, GLFW_PRESS);
+  cefgui->mouseClick(btn, GLFW_RELEASE);
 }
 
-void motion(int x, int y)
+void motion(GLFWwindow* window, double x, double y)
 {
   // send mouse movement to browser
-  cefgui->mouseMove(x, y);
+  cefgui->mouseMove((int) x, (int) y);
 }
 
-void keyboard(unsigned char key, int x, int y)
+void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
   // send key press to browser
   cefgui->keyPress(key);
@@ -50,33 +51,35 @@ int main(int argc, char** argv)
   // initialize cefgui
   cefgui = initCefgui(argc, argv);
 
-  glutInit(&argc, argv);
+  if (!glfwInit())
+    exit(EXIT_FAILURE);
 
-  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-  glutInitContextVersion(3, 2);
-  glutInitContextProfile(GLUT_CORE_PROFILE);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  glutInitWindowSize(1000, 1000);
-  glutInitWindowPosition(200, 200);
+  GLFWwindow* window = glfwCreateWindow(1000, 1000, "simple example", NULL, NULL);
 
-  glutCreateWindow("simple example");
+  glfwMakeContextCurrent(window);
+
+  glfwSetFramebufferSizeCallback(window, reshape);
+  glfwSetCursorPosCallback(window, motion);
+  glfwSetMouseButtonCallback(window, mouse);
+  glfwSetKeyCallback(window, keyboard);
+
+  glClearColor(0.0, 0.0, 0.0, 0.0);
 
   glewExperimental = true;
   glewInit();
-
-  glClearColor(0.0, 0.0, 0.0, 0.0);
 
   // set window size & url
   cefgui->reshape(1000, 1000);
   cefgui->load("http://www.google.com");
 
-  glutDisplayFunc(display);
-  glutReshapeFunc(reshape);
-  glutMouseFunc(mouse);
-  glutPassiveMotionFunc(motion);
-  glutKeyboardFunc(keyboard);
-
-  glutMainLoop();
+  while (!glfwWindowShouldClose(window)) {
+    display(window);
+  }
 
   return 0;
 }

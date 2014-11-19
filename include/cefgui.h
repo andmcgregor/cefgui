@@ -19,12 +19,14 @@ class Cefgui {
     void reshape(int, int);
 
     void mouseMove(int, int);
-    void mouseClick(int, int, int, int);
-    void keyPress(unsigned char);
+    void mouseClick(int, int);
+    void keyPress(int);
 
     void executeJS(const char*);
 
   private:
+    int mouseX, mouseY;
+
     CefRefPtr<CefBrowser> browser;
     CefRefPtr<BrowserClient> client;
 
